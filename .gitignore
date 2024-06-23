@@ -1,1 +1,5 @@
-data/datVN_guland.csv
+data/*
+data/test/*
+
+!data/test
+!data/test/dataset_chungcu.csv
