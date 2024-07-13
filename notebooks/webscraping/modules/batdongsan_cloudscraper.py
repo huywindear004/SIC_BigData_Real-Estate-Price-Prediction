@@ -101,14 +101,23 @@ def process_multiple_pages(base_url, start, end, typeOfProperty="batdongsan"):
     scraper = cloudscraper.create_scraper(
         delay=10, browser={"browser": "chrome", "platform": "windows", "mobile": False}
     )
+    temp = []
+    prev = start
     for i in range(start, end + 1):
-        # Write to local
+        temp += process_single_page(base_url + str(i), scraper)
+
+        # Each file contains 20 x 20 collections
+        if i % 20 == 0:
+            temp.clear()
+            # Write to local
+            file_name = f"../../data/{typeOfProperty}_page-{prev}~{i}_{get_current_time_str()}.json"
+            with open(file_name, "w", encoding="utf-8") as json_file:
+                json.dump(temp, json_file, indent=1)
+            prev = i + 1
+
+    if len(temp) > 0:
         file_name = (
-            f"../../data/{typeOfProperty}_page-{i}_{get_current_time_str()}.json"
+            f"../../data/{typeOfProperty}_page-{prev}~{i}_{get_current_time_str()}.json"
         )
         with open(file_name, "w", encoding="utf-8") as json_file:
-            json.dump(
-                process_single_page(base_url + str(i), scraper),
-                json_file,
-                indent=1,
-            )
+            json.dump(temp, json_file, indent=1)
