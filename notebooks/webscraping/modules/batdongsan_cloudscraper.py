@@ -103,6 +103,7 @@ def process_multiple_pages(base_url, start, end, typeOfProperty="batdongsan"):
     )
     temp = []
     prev = start
+    i = start
     for i in range(start, end + 1):
         temp += process_single_page(base_url + str(i), scraper)
 
