@@ -104,21 +104,22 @@ def process_multiple_pages(base_url, start, end, typeOfProperty="batdongsan"):
     temp = []
     prev = start
     i = start
-    for i in range(start, end + 1):
-        temp += process_single_page(base_url + str(i), scraper)
+    try:
+        for i in range(start, end + 1):
+            temp += process_single_page(base_url + str(i), scraper)
 
-        # Each file contains 20 x 20 collections
-        if i % 20 == 0:
-            temp.clear()
-            # Write to local
+            # Each file contains 20 x 20 collections
+            if i % 20 == 0:
+                temp.clear()
+                # Write to local
+                file_name = f"../../data/{typeOfProperty}_page-{prev}~{i}_{get_current_time_str()}.json"
+                with open(file_name, "w", encoding="utf-8") as json_file:
+                    json.dump(temp, json_file, indent=1)
+                prev = i + 1
+    except Exception:
+        pass
+    finally:
+        if len(temp) > 0:
             file_name = f"../../data/{typeOfProperty}_page-{prev}~{i}_{get_current_time_str()}.json"
             with open(file_name, "w", encoding="utf-8") as json_file:
                 json.dump(temp, json_file, indent=1)
-            prev = i + 1
-
-    if len(temp) > 0:
-        file_name = (
-            f"../../data/{typeOfProperty}_page-{prev}~{i}_{get_current_time_str()}.json"
-        )
-        with open(file_name, "w", encoding="utf-8") as json_file:
-            json.dump(temp, json_file, indent=1)
