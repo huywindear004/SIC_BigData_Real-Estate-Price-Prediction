@@ -110,12 +110,12 @@ def process_multiple_pages(base_url, start, end, typeOfProperty="batdongsan"):
 
             # Each file contains 20 x 20 collections
             if i % 20 == 0:
-                temp.clear()
                 # Write to local
                 file_name = f"../../data/{typeOfProperty}_page-{prev}~{i}_{get_current_time_str()}.json"
                 with open(file_name, "w", encoding="utf-8") as json_file:
                     json.dump(temp, json_file, indent=1)
                 prev = i + 1
+                temp.clear()
     except Exception:
         pass
     finally:
