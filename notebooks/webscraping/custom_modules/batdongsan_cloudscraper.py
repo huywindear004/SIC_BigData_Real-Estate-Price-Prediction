@@ -117,7 +117,7 @@ def process_multiple_pages(base_url, start, end, typeOfProperty="batdongsan"):
                 prev = i + 1
                 temp.clear()
     except Exception:
-        pass
+        print(f"Loi: {base_url + str(i)}")
     finally:
         if len(temp) > 0:
             file_name = f"../../data/{typeOfProperty}_page-{prev}~{i}_{get_current_time_str()}.json"
