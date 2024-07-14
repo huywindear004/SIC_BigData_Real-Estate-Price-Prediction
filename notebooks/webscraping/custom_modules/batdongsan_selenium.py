@@ -1,4 +1,7 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from threading import Thread
 from time import sleep
 from bs4 import BeautifulSoup
@@ -43,7 +46,15 @@ def extract_property_urls_single_page(html_content):
 
 
 def process_single_property(property_url, chrome_driver: webdriver.Chrome):
+    wait = WebDriverWait(chrome_driver, 5)
     chrome_driver.get(property_url)
+    wait.until(
+        EC.presence_of_element_located(
+            (By.CSS_SELECTOR, ".re__section.re__pr-map.js__section.js__li-other")
+        )
+    )
+    chrome_driver.execute_script("window.stop();")
+
     html_content = chrome_driver.page_source
     soup = BeautifulSoup(html_content, "html.parser")
 
@@ -78,12 +89,20 @@ def process_single_property(property_url, chrome_driver: webdriver.Chrome):
     return property_data
 
 
-def process_single_page(page_url, chrome_driver: webdriver.Chrome, max_retry=1):
+def process_single_page(page_url, chrome_driver: webdriver.Chrome, max_retry=0):
     properties = []
     for attempt in range(max_retry + 1):
         try:
             print("Processing:", page_url)
+            wait = WebDriverWait(chrome_driver, 5)
             chrome_driver.get(page_url)
+
+            wait.until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, ".js__product-link-for-product-id")
+                )
+            )
+            chrome_driver.execute_script("window.stop();")
 
             # Check for Cloudflare bot detection
             if "Cloudflare" in chrome_driver.page_source:

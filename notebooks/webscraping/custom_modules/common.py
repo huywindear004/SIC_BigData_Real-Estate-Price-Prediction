@@ -58,7 +58,7 @@ def createChromeDriver() -> webdriver.Chrome:
     options.add_argument("--disable-gpu")
     options.add_argument("--incognito")
     # Stop when html is loaded
-    options.page_load_strategy = "eager"
+    options.page_load_strategy = "none"
 
     driver = webdriver.Chrome(options=options)
     return driver
