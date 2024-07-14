@@ -4,7 +4,6 @@ from unidecode import unidecode
 import re
 from time import sleep
 import random
-import json
 from datetime import datetime
 
 
