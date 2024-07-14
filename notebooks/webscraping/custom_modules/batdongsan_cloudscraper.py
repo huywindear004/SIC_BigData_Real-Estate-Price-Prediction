@@ -112,8 +112,8 @@ def process_multiple_pages(
         for i in range(start, end + 1):
             temp += process_single_page(base_url + str(i), scraper)
 
-            # Each file contains 20 x 20 collections
-            if i % 20 == 0:
+            # Each file contains 100 x 20 collections
+            if i % 100 == 0:
                 # Write to local
                 common.write_json_file(fileOutPath, temp, prev, i, typeOfProperty)
                 prev = i + 1
