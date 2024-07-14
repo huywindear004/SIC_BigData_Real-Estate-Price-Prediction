@@ -8,7 +8,6 @@ from bs4 import BeautifulSoup
 from unidecode import unidecode
 
 import re
-import logging
 import random
 
 import custom_modules.common as common
@@ -147,28 +146,3 @@ def process_multiple_pages(
 
         driver.close()
         driver.quit()
-
-
-def threaded_selenium_scrapping(nthreads, id_range, limit_each_page):
-    store = []
-    threads = []
-    chrome_drivers = common.createChromeDriver(nthreads)
-    for idx, chrome_driver in enumerate(chrome_drivers):
-        ids = id_range[idx::nthreads]
-        logging.info(ids)
-        t = Thread(
-            target=process_multiple_pages,
-            args=(ids, chrome_driver, store, limit_each_page),
-        )
-        threads.append(t)
-
-    # start the threads
-    [t.start() for t in threads]
-    # wait for the threads to finish
-    [t.join() for t in threads]
-
-    # with open(f"reconciled_data/{get_current_time_str()}_reconciled_properies.json", 'w',encoding='utf-8') as json_file:
-    #     json.dump(store, json_file, ensure_ascii=False, indent=4)
-
-    for cd in chrome_drivers:
-        cd.quit()

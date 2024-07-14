@@ -8,6 +8,9 @@ import json
 from datetime import datetime
 
 
+import custom_modules.common as common
+
+
 def get_current_time_str():
     current_datetime = datetime.now()
     formatted_datetime = current_datetime.strftime("%d_%m_%Y_%H_%M")
@@ -97,7 +100,9 @@ def process_single_page(page_url, scraper):
     return properties
 
 
-def process_multiple_pages(base_url, start, end, typeOfProperty="batdongsan"):
+def process_multiple_pages(
+    fileOutPath, base_url, start, end, typeOfProperty="batdongsan"
+):
     scraper = cloudscraper.create_scraper(
         delay=10, browser={"browser": "chrome", "platform": "windows", "mobile": False}
     )
@@ -111,15 +116,11 @@ def process_multiple_pages(base_url, start, end, typeOfProperty="batdongsan"):
             # Each file contains 20 x 20 collections
             if i % 20 == 0:
                 # Write to local
-                file_name = f"../../data/{typeOfProperty}_page-{prev}~{i}_{get_current_time_str()}.json"
-                with open(file_name, "w", encoding="utf-8") as json_file:
-                    json.dump(temp, json_file, indent=1)
+                common.write_json_file(fileOutPath, temp, prev, i, typeOfProperty)
                 prev = i + 1
                 temp.clear()
-    except Exception:
-        print(f"Loi: {base_url + str(i)}")
+    except Exception as e:
+        print(f"Loi: {base_url + str(i)} !!!! {e}")
     finally:
         if len(temp) > 0:
-            file_name = f"../../data/{typeOfProperty}_page-{prev}~{i}_{get_current_time_str()}.json"
-            with open(file_name, "w", encoding="utf-8") as json_file:
-                json.dump(temp, json_file, indent=1)
+            common.write_json_file(fileOutPath, temp, prev, i, typeOfProperty)
