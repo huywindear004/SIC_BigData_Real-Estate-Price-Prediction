@@ -5,7 +5,8 @@ from datetime import datetime
 
 def write_json_file(path, data, start, end, typeOfProp):
     with open(
-        path + f"{typeOfProp}-dataset_page-{start}~{end}_{get_current_time_str()}.json",
+        path
+        + f"{typeOfProp}-dataset_page-{start:0>5}~{end:0>5}_{get_current_time_str()}.json",
         "w",
         encoding="utf-8",
     ) as fileOut:

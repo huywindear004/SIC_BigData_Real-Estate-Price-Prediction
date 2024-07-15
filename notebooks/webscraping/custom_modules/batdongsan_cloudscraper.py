@@ -51,7 +51,9 @@ def process_single_property(property_url, scraper: cloudscraper.CloudScraper):
     response = scraper.get(property_url)
 
     if response.status_code != 200:
-        return
+        raise Exception(
+            f"Couldn't get {property_url}. Status code: {response.status_code}"
+        )
 
     response.encoding = "utf-8"
     soup = BeautifulSoup(response.text, "html.parser")
@@ -65,7 +67,7 @@ def process_single_property(property_url, scraper: cloudscraper.CloudScraper):
         property_data[unidecode(key.title().replace(" ", ""))] = value
 
     # Find property address
-    address = soup.find("span", class_="re__pr-short-description js__pr-address").text
+    address = soup.select("span.re__pr-short-description.js__pr-address").text
     property_data["DiaChi"] = address
 
     # Find property city & District & Ward
@@ -90,7 +92,7 @@ def process_single_page(page_url, scraper):
     print("Processing:", page_url)
     response = scraper.get(page_url)
     if response.status_code != 200:
-        return
+        raise Exception(f"Couldn't get {page_url}. Status code: {response.status_code}")
     properties = []
     prop_urls = extract_property_urls(response.text)
     for prop_url in prop_urls:
@@ -100,7 +102,7 @@ def process_single_page(page_url, scraper):
 
 
 def process_multiple_pages(
-    fileOutPath, base_url, start, end, typeOfProperty="batdongsan"
+    fileOutPath, base_url, start, end, typeOfProperty="batdongsan", retryEachPage=0
 ):
     scraper = cloudscraper.create_scraper(
         delay=10, browser={"browser": "chrome", "platform": "windows", "mobile": False}
@@ -110,8 +112,17 @@ def process_multiple_pages(
     i = start
     try:
         for i in range(start, end + 1):
-            temp += process_single_page(base_url + str(i), scraper)
-
+            # Try
+            for tryCount in range(retryEachPage + 1):
+                try:
+                    temp += process_single_page(base_url + str(i), scraper)
+                    break
+                except Exception as e:
+                    if tryCount < retryEachPage:
+                        print("Wait for retry")
+                        sleep(100)
+                    else:
+                        raise e
             # Each file contains 100 x 20 collections
             if i % 100 == 0:
                 # Write to local
@@ -119,7 +130,8 @@ def process_multiple_pages(
                 prev = i + 1
                 temp.clear()
     except Exception as e:
-        print(f"Loi: {base_url + str(i)} !!!! {e}")
+        print(f"Error: {e.with_traceback()}")
+        i -= 1
     finally:
         if len(temp) > 0:
             common.write_json_file(fileOutPath, temp, prev, i, typeOfProperty)

@@ -66,16 +66,18 @@ def process_single_property(property_url, chrome_driver: webdriver.Chrome):
         value = item.find("span", class_="re__pr-specs-content-item-value").text
         property_data[unidecode(key.title().replace(" ", ""))] = value
 
-    # Find property address
-    address = soup.find("span", class_="re__pr-short-description js__pr-address").text
-    property_data["DiaChi"] = address
+        # Find property address
+        address = soup.find(
+            "span", class_="re__pr-short-description js__pr-address"
+        ).text
+        property_data["DiaChi"] = address
 
-    # Find property city & District & Ward
-    breadCrumb_addr = soup.select(
-        "div.re__breadcrumb.js__breadcrumb.js__ob-breadcrumb .re__link-se"
-    )
-    property_data["City"] = breadCrumb_addr[1].text
-    property_data["District"] = breadCrumb_addr[2].text
+        # Find property city & District & Ward
+        breadCrumb_addr = soup.select(
+            "div.re__breadcrumb.js__breadcrumb.js__ob-breadcrumb .re__link-se"
+        )
+        property_data["City"] = breadCrumb_addr[1].text
+        property_data["District"] = breadCrumb_addr[2].text
 
     # Find property map coordinates
     map_coor = soup.find(
@@ -93,7 +95,7 @@ def process_single_page(page_url, chrome_driver: webdriver.Chrome, max_retry=0):
     for attempt in range(max_retry + 1):
         try:
             print("Processing:", page_url)
-            wait = WebDriverWait(chrome_driver, 5)
+            wait = WebDriverWait(chrome_driver, 30)
             chrome_driver.get(page_url)
 
             wait.until(
@@ -116,7 +118,7 @@ def process_single_page(page_url, chrome_driver: webdriver.Chrome, max_retry=0):
 
             return properties
         except Exception:
-            sleep(5)
+            sleep(100)
     raise Exception("Couldn't get data from", page_url)
 
 
@@ -140,6 +142,7 @@ def process_multiple_pages(
                 temp.clear()
     except Exception as e:
         print(f"Error: {e}({baseUrl + str(i)})")
+        i -= 1
     finally:
         if len(temp) > 0:
             common.write_json_file(fileOutPath, temp, prev, i, typeOfProperty)
