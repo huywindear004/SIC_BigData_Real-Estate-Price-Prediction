@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from threading import Thread
 from time import sleep
 from bs4 import BeautifulSoup
 from unidecode import unidecode
@@ -114,7 +113,7 @@ def process_single_page(page_url, chrome_driver: webdriver.Chrome, max_retry=0):
             property_urls = extract_property_urls_single_page(html_content)
             for property_url in property_urls:
                 properties.append(process_single_property(property_url, chrome_driver))
-                sleep(random.randint(1, 3))
+                sleep(random.randint(1, 2))
 
             return properties
         except Exception:
@@ -131,7 +130,7 @@ def process_multiple_pages(
     i = start
     try:
         for i in range(start, end + 1):
-            temp += process_single_page(baseUrl + str(i), driver, 40)
+            temp += process_single_page(baseUrl + str(i), driver)
 
             # Each file contains 100 x 20 collections
             if i % 100 == 0:
