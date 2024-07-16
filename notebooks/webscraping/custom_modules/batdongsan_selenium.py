@@ -117,7 +117,8 @@ def process_single_page(page_url, chrome_driver: webdriver.Chrome, max_retry=0):
 
             return properties
         except Exception:
-            sleep(100)
+            if attempt < max_retry:
+                sleep(100)
     raise Exception("Couldn't get data from", page_url)
 
 
@@ -146,5 +147,4 @@ def process_multiple_pages(
         if len(temp) > 0:
             common.write_json_file(fileOutPath, temp, prev, i, typeOfProperty)
 
-        driver.close()
         driver.quit()
