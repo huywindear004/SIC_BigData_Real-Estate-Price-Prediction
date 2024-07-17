@@ -113,7 +113,8 @@ def process_single_page(page_url, chrome_driver: webdriver.Chrome, max_retry=0):
             property_urls = extract_property_urls_single_page(html_content)
             for property_url in property_urls:
                 properties.append(process_single_property(property_url, chrome_driver))
-                sleep(random.randint(1, 2))
+                # sleep(random.randint(1, 2))
+                # sleep(1)
 
             return properties
         except Exception:

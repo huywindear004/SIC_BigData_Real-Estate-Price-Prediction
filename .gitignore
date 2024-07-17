@@ -2,10 +2,7 @@ data/*
 data/test/*
 **/__pycache__
 **/downloaded_files
-data/batdongsan/*
-data/nhatot/*
 
 !data/test
-!data/batdongsan
-!data/nhatot
 !data/test/dataset_chungcu.csv
+!donvihanhchinhvn

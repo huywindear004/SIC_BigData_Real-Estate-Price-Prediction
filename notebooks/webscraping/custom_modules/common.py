@@ -1,9 +1,12 @@
 import json
 from selenium import webdriver
 from datetime import datetime
+import os
 
 
 def write_json_file(path, data, start, end, typeOfProp):
+    if not os.path.exists(path):
+        os.makedirs(path)
     with open(
         path
         + f"{typeOfProp}-dataset_page-{start:0>5}~{end:0>5}_{get_current_time_str()}.json",
