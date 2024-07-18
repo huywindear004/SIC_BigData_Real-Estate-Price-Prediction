@@ -2,12 +2,13 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import sleep
 from bs4 import BeautifulSoup
 from unidecode import unidecode
 
 import re
 import random
+from threading import Thread
+from time import sleep
 
 import custom_modules.common as common
 
@@ -113,39 +114,54 @@ def process_single_page(page_url, chrome_driver: webdriver.Chrome, max_retry=0):
             property_urls = extract_property_urls_single_page(html_content)
             for property_url in property_urls:
                 properties.append(process_single_property(property_url, chrome_driver))
-                # sleep(random.randint(1, 2))
-                # sleep(1)
+                # sleep(random.randint(1, 3))
+                sleep(1)
 
             return properties
         except Exception:
             if attempt < max_retry:
-                sleep(100)
-    raise Exception("Couldn't get data from", page_url)
+                sleep(5)
+    raise Exception("Couldn't crawl data from", page_url)
 
 
-def process_multiple_pages(
-    fileOutPath, baseUrl, start, end, typeOfProperty="batdongsan"
+def process_multiple_pages(base_url, page_ids, driver, store):
+    if store is None:
+        store = []
+
+    for idx in page_ids:
+        store += process_single_page(f"{base_url}{idx}", driver)
+
+    return store
+
+
+def multi_threaded_scraping(
+    num_threads, file_out_path, base_url, start, end, typeOfProperty
 ):
-    driver = common.createChromeDriver()
-    temp = []
-    prev = start
-    i = start
-    try:
-        for i in range(start, end + 1):
-            temp += process_single_page(baseUrl + str(i), driver)
+    threads = []
+    store = []
 
-            # Each file contains 100 x 20 collections
-            if i % 100 == 0:
-                # Write to local
-                common.write_json_file(fileOutPath, temp, prev, i, typeOfProperty)
-                # Reset buffer
-                prev = i + 1
-                temp.clear()
-    except Exception as e:
-        print(f"Error: {e}({baseUrl + str(i)})")
-        i -= 1
-    finally:
-        if len(temp) > 0:
-            common.write_json_file(fileOutPath, temp, prev, i, typeOfProperty)
+    page_range = list(range(start, end + 1))
+    drivers = [common.createChromeDriver() for _ in range(num_threads)]
 
+    # Split the page_range into parts
+    for idx, driver in enumerate(drivers):
+        ids = page_range[idx::num_threads]
+        thread = Thread(
+            target=process_multiple_pages, args=(base_url, ids, driver, store)
+        )
+        threads.append(thread)
+
+    # Start the threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for the threads to finish
+    for thread in threads:
+        thread.join()
+
+    # Quit all the drivers
+    for driver in drivers:
         driver.quit()
+
+    # Write to file
+    common.write_json_file(file_out_path, store, start, end, typeOfProperty)
