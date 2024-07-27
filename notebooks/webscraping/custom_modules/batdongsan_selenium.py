@@ -90,30 +90,30 @@ def process_single_property(property_url, chrome_driver: webdriver.Chrome):
     return property_data
 
 
-def process_single_page(page_url, chrome_driver: webdriver.Chrome, max_retry=0):
+def process_single_page(page_url, driver, max_retry=0):
     properties = []
     for attempt in range(max_retry + 1):
         try:
             print("Processing:", page_url)
-            wait = WebDriverWait(chrome_driver, 30)
-            chrome_driver.get(page_url)
+            wait = WebDriverWait(driver, 30)
+            driver.get(page_url)
 
             wait.until(
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, ".js__product-link-for-product-id")
                 )
             )
-            chrome_driver.execute_script("window.stop();")
+            driver.execute_script("window.stop();")
 
             # Check for Cloudflare bot detection
-            if "Cloudflare" in chrome_driver.page_source:
+            if "Cloudflare" in driver.page_source:
                 raise Exception("Cloudflare detected in the page source")
 
             # Scrapping data for each property
-            html_content = chrome_driver.page_source
+            html_content = driver.page_source
             property_urls = extract_property_urls_single_page(html_content)
             for property_url in property_urls:
-                properties.append(process_single_property(property_url, chrome_driver))
+                properties.append(process_single_property(property_url, driver))
                 # sleep(random.randint(1, 3))
                 sleep(1)
 
@@ -124,18 +124,18 @@ def process_single_page(page_url, chrome_driver: webdriver.Chrome, max_retry=0):
     raise Exception("Couldn't crawl data from", page_url)
 
 
-def process_multiple_pages(base_url, page_ids, driver, store):
+def process_multiple_pages(base_url, page_ids, driver, store, filter=""):
     if store is None:
         store = []
 
     for idx in page_ids:
-        store += process_single_page(f"{base_url}{idx}", driver)
+        store += process_single_page(f"{base_url}{idx}{filter}", driver)
 
     return store
 
 
 def multi_threaded_scraping(
-    num_threads, file_out_path, base_url, start, end, typeOfProperty
+    num_threads, file_out_path, base_url, start, end, typeOfProperty, filter=""
 ):
     threads = []
     store = []
@@ -147,21 +147,23 @@ def multi_threaded_scraping(
     for idx, driver in enumerate(drivers):
         ids = page_range[idx::num_threads]
         thread = Thread(
-            target=process_multiple_pages, args=(base_url, ids, driver, store)
+            target=process_multiple_pages, args=(base_url, ids, driver, store, filter)
         )
         threads.append(thread)
 
-    # Start the threads
-    for thread in threads:
-        thread.start()
+    try:
+        # Start the threads
+        for thread in threads:
+            thread.start()
 
-    # Wait for the threads to finish
-    for thread in threads:
-        thread.join()
-
-    # Quit all the drivers
-    for driver in drivers:
-        driver.quit()
-
-    # Write to file
-    common.write_json_file(file_out_path, store, start, end, typeOfProperty)
+        # Wait for the threads to finish
+        for thread in threads:
+            thread.join()
+    except:
+        pass
+    finally:
+        # Quit all the drivers
+        for driver in drivers:
+            driver.quit()
+        # Write to file
+        common.write_json_file(file_out_path, store, start, end, typeOfProperty)
