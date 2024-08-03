@@ -62,7 +62,7 @@ import time
 import numpy as np
 import random
 
-from webscraping import common
+from modules.webscraping import common
 
 
 def process_json_data(json_data):
