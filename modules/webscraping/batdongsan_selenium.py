@@ -10,7 +10,7 @@ import random
 from threading import Thread
 from time import sleep
 
-import custom_modules.common as common
+import common as common
 
 
 def extract_page_in_url(url: str):

@@ -7,7 +7,7 @@ import random
 from datetime import datetime
 
 
-import custom_modules.common as common
+import common as common
 
 
 def get_current_time_str():
