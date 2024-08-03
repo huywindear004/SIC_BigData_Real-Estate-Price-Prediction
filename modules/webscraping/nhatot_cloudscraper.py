@@ -55,14 +55,11 @@
 #   ward_name:
 
 import requests
-import sys
-import json
-import pandas as pd
 import time
 import numpy as np
 import random
 
-from modules.webscraping import common
+import common
 
 
 def process_json_data(json_data):
@@ -76,7 +73,7 @@ def process_json_data(json_data):
             "Latitude": i.get("latitude"),
             "Longitude": i.get("longitude"),
             "Price": i.get("price"),
-            "PricePerM2": i.get("price_million_per_m2"),
+            "PriceMillionPerM2": i.get("price_million_per_m2"),
             "Size": i.get("size"),
             "Characteristics": i.get("pty_characteristics"),
             "LandType": i.get("land_type"),
