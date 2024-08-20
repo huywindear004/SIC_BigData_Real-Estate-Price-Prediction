@@ -1,0 +1,101 @@
+/* This creates a skinny side bar fixed to the left of the page */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding: 10rem 1rem 2rem;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  z-index: 1050;
+  transition: width 0.1s ease-in-out;
+  font-size: 1.6rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar.collapsed {
+  width: var(--collapsed-sidebar-width);
+}
+
+.sidebar.expanded {
+  width: var(--expanded-sidebar-width);
+}
+
+.sidebar .nav-link {
+  width: 100%;
+  white-space: nowrap;
+  line-height: 5rem;
+  margin-bottom: 5px;
+  transition: 0.3s;
+  position: relative;
+}
+
+.sidebar .nav-link:not(.active):hover {
+  background-color: #efefef;
+}
+.sidebar .nav-link:hover {
+  opacity: 0.9;
+}
+
+.sidebar .nav-link i {
+  margin-left: -4px;
+}
+.sidebar.collapsed .nav-link i {
+  margin-right: 2.5rem;
+}
+.sidebar.expanded .nav-link i {
+  margin-right: 1rem;
+}
+
+.sidebar .nav-link span {
+  color: #000;
+}
+
+.sidebar .nav-link.active span {
+  color: white;
+}
+
+/* hide the navlink labels when sidebar is collapsed */
+.sidebar.collapsed .nav-link span {
+  position: relative;
+  visibility: hidden;
+  color: black;
+  background-color: #fff;
+}
+
+/* lil arrow for popup */
+.sidebar.collapsed .nav-link span::before {
+  position: absolute;
+  content: "";
+  left: -4px;
+  top: calc(50% - 5px);
+  border-width: 5px 5px 5px 0px;
+  border-style: solid;
+  border-color: transparent #fff transparent transparent;
+}
+
+.sidebar.collapsed .nav-link:hover span {
+  visibility: visible;
+  transition: 0.2s;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.sidebar__mode-btn {
+  background-color: transparent;
+  border: none;
+  color: #0d6efd;
+  border-radius: 5px;
+  font-size: 2rem;
+}
+
+.sidebar__mode-btn:hover {
+  background-color: #efefef;
+}
+#sidebar-toggle-icon.rotate {
+  transform: rotate(180deg);
+}

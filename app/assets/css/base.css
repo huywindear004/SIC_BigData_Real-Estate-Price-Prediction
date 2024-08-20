@@ -1,0 +1,41 @@
+:root {
+  --collapsed-sidebar-width: 5rem;
+  --expanded-sidebar-width: 20rem;
+}
+
+html {
+  font-size: 62.5%;
+  line-height: 1.6rem;
+  font-family: "Roboto", sans-serif;
+  box-sizing: border-box;
+}
+* {
+  box-sizing: inherit;
+}
+
+#header {
+  text-align: center;
+  /* font-size: 3.5rem; */
+  color: midnightblue;
+  top: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  padding: 10px;
+}
+
+#main {
+  transition: 0.3s;
+}
+
+#main.collapsed-sidebar {
+  margin-left: var(--collapsed-sidebar-width);
+}
+
+#main.expanded-sidebar {
+  margin-left: var(--expanded-sidebar-width);
+}
+
+.container {
+  padding: 10px;
+}

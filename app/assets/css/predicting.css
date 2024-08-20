@@ -1,0 +1,29 @@
+#price_predicted {
+  line-height: 10rem;
+  min-height: 10rem;
+  visibility: visible;
+  text-align: center;
+  color: navy;
+  text-transform: uppercase;
+}
+
+#predict-btn {
+  margin-top: 20px;
+}
+
+.Select-control {
+  cursor: pointer;
+  font-size: 1.4rem;
+}
+
+input.Select-control {
+  cursor: text;
+}
+
+.input-label {
+  margin-top: 15px;
+}
+
+.input-label i {
+  margin-right: 5px;
+}

@@ -1,0 +1,48 @@
+.location-menu {
+  display: flex;
+  justify-content: space-between;
+  height: 120px;
+  margin-bottom: 20px;
+}
+
+.location-dropdowns {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  flex-grow: 1;
+  margin-right: 5px;
+  font-size: 1.4rem;
+}
+
+#find-btn {
+  width: 100px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+#find-btn:hover,
+#find-btn:focus {
+  border-color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.65);
+}
+
+#find-btn:hover {
+  transform: translateY(-1.5px);
+  background-color: #efefef;
+}
+
+#find-btn:active {
+  background-color: #f0f0f1;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(0);
+}
+
+.section-one {
+  height: 1000px;
+}
