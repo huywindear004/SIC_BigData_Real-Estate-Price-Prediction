@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.append(os.path.abspath(".."))
+
 # Import packages
 import dash
 from dash import Dash, html, dcc, clientside_callback, Input, Output, State
