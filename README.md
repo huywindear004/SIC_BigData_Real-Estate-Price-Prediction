@@ -22,3 +22,6 @@ This project focuses on building a predictive model for real estate prices in Vi
 
 ![alt text](imgs/web1.png)
 ![alt text](imgs/web2.png)
+
+## note
+CongQuann: Housing  data processing and prediction
