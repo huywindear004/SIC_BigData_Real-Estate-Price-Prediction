@@ -1,7 +1,7 @@
 import dash
 from dash import html, dash_table, dcc, callback, Output, Input, State
 
-from pages.analytics_pages import (
+from app.pages.analytics_pages import (
     analytics_apartment,
     analytics_house,
     analytics_land,

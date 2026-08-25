@@ -223,7 +223,7 @@ layout = html.Div(
                 html.Div(
                     [
                         html.Button(
-                            "Predict",
+                            "Forecast",
                             id="predict-btn",
                             n_clicks=0,
                             className="col-12 btn btn-primary btn-lg btn-block",

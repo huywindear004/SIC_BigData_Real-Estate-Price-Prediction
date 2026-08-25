@@ -1,5 +1,6 @@
 dash==2.17.1
 dash_bootstrap_components==1.6.0
+gunicorn==26.2.0
 joblib==1.4.2
 lightgbm==4.5.0
 numpy==2.5.2

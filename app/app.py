@@ -8,7 +8,7 @@ import dash
 from dash import Dash, html, dcc, clientside_callback, Input, Output, State
 import dash_bootstrap_components as dbc
 
-from components.sidebar import sidebar
+from app.components.sidebar import sidebar
 
 # Initialize the app
 app = Dash(
@@ -73,6 +73,8 @@ app.clientside_callback(
     State("sidebar-toggle-state", "data"),
     prevent_initial_call=True,
 )
+
+server = app.server
 
 # Run the app
 if __name__ == "__main__":
