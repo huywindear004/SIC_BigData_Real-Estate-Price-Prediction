@@ -31,7 +31,7 @@ def sidebar():
                     dbc.NavLink(
                         [
                             html.I(className="fa-solid fa-coins"),
-                            html.Span("Price Predicting"),
+                            html.Span("Price Forecasting"),
                         ],
                         href="/predicting",
                         active="exact",
