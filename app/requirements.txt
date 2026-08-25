@@ -1,7 +1,6 @@
 dash==2.17.1
 dash_bootstrap_components==1.6.0
 joblib==1.4.2
-modules==1.0.0
 numpy==2.5.2
 pandas==3.0.5
 seaborn==0.13.2
