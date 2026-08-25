@@ -4,3 +4,4 @@ joblib==1.4.2
 numpy==2.5.2
 pandas==3.0.5
 seaborn==0.13.2
+Unidecode==1.4.0
