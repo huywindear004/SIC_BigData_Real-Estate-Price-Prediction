@@ -184,13 +184,13 @@ def get_all_wards(reg_id, are_id):
 #################################################### Load dvhc ####################################################
 # Get the absolute path
 current_dir = os.path.dirname(os.path.abspath(__file__))
-json_path = (
-    "/".join(i for i in current_dir.split("\\")[:-3]) + "/data/donvihanhchinhvn/"
+json_path = os.path.join(
+    current_dir, "..", "..", "..", "data", "donvihanhchinhvn"
 )
 
 
 def load_dvhc_file(file_name) -> dict:
-    with open(json_path + file_name, "r", encoding="utf8") as dvhc_file:
+    with open(os.path.join(json_path, file_name), "r", encoding="utf8") as dvhc_file:
         dvhc_json = json.load(dvhc_file)
     return dvhc_json
 
