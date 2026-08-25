@@ -1,6 +1,5 @@
 from dash import html, dash_table, dcc, callback, Output, Input, State
 import pandas as pd
-import seaborn as sns
 
 # Add path to import root pakages
 import os
